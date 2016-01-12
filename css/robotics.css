@@ -1,0 +1,12 @@
+h1, h2 {
+	margin: 0;
+	text-align: center;
+	text-shadow: 0 0 10px #999;
+}
+h1 {
+	font-size: 4.2em;
+}
+h2 {
+	margin: -0.75em 0 0 0;
+	font-style: italic;
+}
