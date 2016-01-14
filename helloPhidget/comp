@@ -1,0 +1,23 @@
+#!/bin/bash
+
+IFS=$'\n'
+
+cat start.html
+
+for f in code/*; do
+
+	printf "<li>\n
+					-\n
+					<pre>\n
+					<code class=\"VB.NET\">\n"
+
+	echo "$(cat $f)" | tr '~' '\n'
+
+	printf "<br>\n
+					</code>\n
+					</pre>\n
+					</li>\n"
+
+done
+
+cat quit.html

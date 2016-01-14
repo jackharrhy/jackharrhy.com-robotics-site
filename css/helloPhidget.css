@@ -1,0 +1,17 @@
+h1 {
+	color: #004182;
+	text-shadow: 0 0 10px #004182;
+}
+h2 {
+	font-size: 1.2em;
+}
+
+code {
+	border-top: 3px solid blue;
+	tab-size: 2.5;
+}
+
+#wrap {
+	margin: 0 auto;
+	width: 95vw;
+}

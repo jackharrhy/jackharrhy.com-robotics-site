@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="English">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Robotics/helloPhidget | jackharrhy</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="stylesheet" href="css/normalize.min.css">
+		<link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="css/robotics.css">
+		<link rel="stylesheet" href="css/helloPhidget.css">
+	</head>
+	<body>
+
+		<div id="wrap">
+
+			<h1>Robotics</h1>
+			<h2>Hello Phidget!</h2>
+
+			<ol>
+<li>
+
+					-
+
+					<pre>
+
+					<code class="VB.NET">
+' This is the blank project that Visual Basic
+' creates when you make a new project
+'
+' You should have followed the previous tutorial
+' on setting up your project with the Phidget DLL
+' file before going ahead
+'
+' By the end of this tutorial you should have a
+' program that once you plug in a Phidget device
+' into the USB of either your computer
+' (or PhidgetSBC via the WebService), it will spit
+' out what device you connected, and then when you
+' disconnect it will do the same
+
+Module Module1
+
+	Sub Main()
+		' Nothing to see here!
+	End Sub
+
+End Module
+<br>
+
+					</code>
+
+					</pre>
+
+					</li>
+<li>
+
+					-
+
+					<pre>
+
+					<code class="VB.NET">
+' We now setup the Manager, which you guessed it;
+' manages our Phidgets connection to us
+'
+' We start the manager by making a new Manager, and
+' then we open it up to connections
+'
+' Later on we will allow for network connections, but
+' now its simply a USB connection from the local
+' computer
+'
+' We also Console.Read() to stop the program from
+' prematurely giving up its meager existence
+
+Module Module1
+
+	Sub Main()
+
+		manager = New Phidgets.Manager() ' Create new manager for our Phidgets
+
+		manager.open() ' Start/open this manager
+
+		Console.WriteLine("Press Enter to end anytime")
+		Console.Read() ' Read to prevent insta-quitting
+		Console.WriteLine("Closing...")
+
+	End Sub
+
+End Module
+<br>
+
+					</code>
+
+					</pre>
+
+					</li>
+<li>
+
+					-
+
+					<pre>
+
+					<code class="VB.NET">
+' I use the "..." to avoid posting all of the code
+' every time I copy it; get used to it or git
+'
+' These following lines will disconnect the Phidget
+' peacefully, as you see by manager.close(), followed
+' by manager = Nothing
+'
+' This is also wrapped in a Try/Catch statement, in
+' which if something goes wrong, it will log 'Error'
+' to the console; which it hopefully won't have to do
+
+		...
+
+		Console.WriteLine("Press Enter to end anytime")
+		Console.Read()
+		Console.WriteLine("Closing...")
+
+		Try ' Try/Catch for errors
+			RemoveHandler manager.Attach, AddressOf manager_Attach
+			RemoveHandler manager.Detach, AddressOf manager_Detach
+			manager.close()
+			manager = Nothing
+			' Remove Handlers, close the manager, and erase the varible
+		Catch ex As Phidgets.Phidget Exception
+			Console.WriteLine("Error")
+		End Try
+
+	End Sub
+
+End Module
+<br>
+
+					</code>
+
+					</pre>
+
+					</li>
+<li>
+
+					-
+
+					<pre>
+
+					<code class="VB.NET">
+' Jumping back to the top of the file, we create
+' "manager_Attach", a sub-module that once we
+' attach a Phidget, it will be called
+' 
+' We grab the Serial Number and name from the
+' arguments to the sub-module, and then neatly
+' write them to the Console
+'
+' Same as last time, this makes use of a Try/Catch
+' to stop the program crashing if things go wrong
+
+Module Module1
+
+	' A new sub for when USB Phidgets are connected to our device
+	Private Sub manager_Attach(ByVal sender As Object, ByVal e As Phidgets.Events.AttachEventArgs) Handles manager.Attach
+
+		' Pre-define varibles
+		Dim serialNumber As Integer
+		Dim name As String
+
+		Try
+			serialNumber = e.Device.SerialNumber
+			name = e.Device.Name
+			' Log the device name and serial number to the console
+			Console.WriteLine("Hello Device {0}, Serial Number: {1}!", serialNumber.ToString, name)
+		Catch ex As Phidgets.PhidgetException
+			Console.WriteLine("Error")
+			Console.WriteLine(ex.Code)
+			Console.WriteLine(ex.Description)
+		End Try
+
+	End Sub
+
+	Sub Main()
+
+		manager = New Phidgets.Manager()
+
+		...
+<br>
+
+					</code>
+
+					</pre>
+
+					</li>
+<li>
+
+					-
+
+					<pre>
+
+					<code class="VB.NET">
+' Now for the opposite to the last step,
+' with virtually the same code except for
+' Goodbye instead of Hello
+'
+' Make sure you place this after you attach,
+' but before your Main()
+
+		...
+
+	End Sub
+
+	Private Sub manager_Detach(ByVal sender As Object, ByVal e As Phidgets.Events.DetachEventArgs) Handles manager.Detach
+
+		Dim serialNumber As Integer
+		Dim name As String
+
+		Try
+			serialNumber = e.Device.SerialNumber
+			name = e.Device.Name
+			Console.WriteLine("Goodbye Device {0}, Serial Number: {1}!", serialNumber.ToString, name)
+		Catch ex As Phidgets.PhidgetException
+			Console.WriteLine("Error")
+			Console.WriteLine(ex.Code)
+			Console.WriteLine(ex.Description)
+		End Try
+
+	End Sub
+
+	Sub Main()
+
+		...
+<br>
+
+					</code>
+
+					</pre>
+
+					</li>
+<li>
+
+					-
+
+					<pre>
+
+					<code class="VB.NET">
+' Last step; we create a sub-module that will
+' be called once an error occurs on the
+' managers side of things
+'
+' We also add a line just before the Main module
+' to make Phidgets.Manager the same as manager,
+' since its must easier to type
+
+		...
+
+	End Sub
+
+	Private Sub manager_Error(ByVal sender As Object, ByVal e As Phidgets.Events.ErrorEventArgs) Handles manager.Error
+		
+		Dim number As Integer
+		Dim description As String
+
+		number = e.Code
+		description = e.Description
+
+		Console.WriteLine("Error Event: {0} - {1}!", number.ToString, description)
+
+	End Sub
+
+	Dim WithEvents manager As Phidgets.Manager
+
+	Sub Main()
+
+		...
+<br>
+
+					</code>
+
+					</pre>
+
+					</li>
+<li>
+
+					-
+
+					<pre>
+
+					<code class="VB.NET">
+' Here is all of the code, in all its glory!
+'
+' Feel free to copy and paste this into your
+' DLL'ed Visual Basic project; but please
+' understand to an extent what it does!
+'
+' This of course is designed only for USB; it
+' will NOT work over network!
+
+Module Module1
+
+	Private Sub manager_Attach(ByVal sender As Object, ByVal e As Phidgets.Events.AttachEventArgs) Handles manager.Attach
+
+		Dim serialNumber As Integer
+		Dim name As String
+
+		Try
+			serialNumber = e.Device.SerialNumber
+			name = e.Device.Name
+			Console.WriteLine("Hello Device {0}, Serial Number: {1}!", serialNumber.ToString, name)
+		Catch ex As Phidgets.PhidgetException
+			Console.WriteLine("Error")
+			Console.WriteLine(ex.Code)
+			Console.WriteLine(ex.Description)
+		End Try
+
+	End Sub
+
+	Private Sub manager_Detach(ByVal sender As Object, ByVal e As Phidgets.Events.DetachEventArgs) Handles manager.Detach
+
+		Dim serialNumber As Integer
+		Dim name As String
+
+		Try
+			serialNumber = e.Device.SerialNumber
+			name = e.Device.Name
+			Console.WriteLine("Goodbye Device {0}, Serial Number: {1}!", serialNumber.ToString, name)
+		Catch ex As Phidgets.PhidgetException
+			Console.WriteLine("Error")
+			Console.WriteLine(ex.Code)
+			Console.WriteLine(ex.Description)
+		End Try
+
+	End Sub
+
+	Private Sub manager_Error(ByVal sender As Object, ByVal e As Phidgets.Events.ErrorEventArgs) Handles manager.Error
+		
+		Dim number As Integer
+		Dim description As String
+
+		number = e.Code
+		description = e.Description
+
+		Console.WriteLine("Error Event: {0} - {1}!", number.ToString, description)
+
+	End Sub
+
+	Dim WithEvents manager As Phidgets.Manager
+
+	Sub Main()
+
+		manager = New Phidgets.Manager()
+
+		manager.open()
+
+		Console.WriteLine("Press Enter to end anytime")
+		Console.Read()
+		Console.WriteLine("Closing...")
+
+		Try
+			RemoveHandler manager.Attach, AddressOf manager_Attach
+			RemoveHandler manager.Detach, AddressOf manager_Detach
+			manager.close()
+			manager = Nothing
+		Catch ex As Phidgets.Phidget Exception
+			Console.WriteLine("Error")
+			Console.WriteLine(ex.Code)
+			Console.WriteLine(ex.Description)
+		End Try
+
+	End Sub
+
+End Module
+<br>
+
+					</code>
+
+					</pre>
+
+					</li>
+</ol>
+</div>
+<link rel="stylesheet" href="styles/idea.css">
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
