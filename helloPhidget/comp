@@ -7,7 +7,6 @@ cat start.html
 for f in code/*; do
 
 	printf "<li>\n
-					-\n
 					<pre>\n
 					<code class=\"VB.NET\">\n"
 

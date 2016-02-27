@@ -22,16 +22,16 @@
 			<ol>
 <li>
 
-					-
-
 					<pre>
 
 					<code class="VB.NET">
+' 1
+'
 ' This is the blank project that Visual Basic
 ' creates when you make a new project
 '
 ' You should have followed the previous tutorial
-' on setting up your project with the Phidget DLL
+' on setting up your project with the Phidget .NET DLL
 ' file before going ahead
 '
 ' By the end of this tutorial you should have a
@@ -57,23 +57,20 @@ End Module
 					</li>
 <li>
 
-					-
-
 					<pre>
 
 					<code class="VB.NET">
-' We now setup the Manager, which you guessed it;
-' manages our Phidgets connection to us
+' 2
 '
-' We start the manager by making a new Manager, and
-' then we open it up to connections
+' We now setup the Phidget manager
 '
-' Later on we will allow for network connections, but
-' now its simply a USB connection from the local
-' computer
+' We start the manager by making a new Manager,
+' and then 'open()' it
 '
-' We also Console.Read() to stop the program from
-' prematurely giving up its meager existence
+' Later on we will allow for network connections,
+' but for now simply a USB connection from the local machine
+'
+' We also Console.Read() to stop the program from quitting
 
 Module Module1
 
@@ -99,21 +96,17 @@ End Module
 					</li>
 <li>
 
-					-
-
 					<pre>
 
 					<code class="VB.NET">
+' 3
+'
 ' I use the "..." to avoid posting all of the code
-' every time I copy it; get used to it or git
+' every time I copy it
 '
 ' These following lines will disconnect the Phidget
 ' peacefully, as you see by manager.close(), followed
 ' by manager = Nothing
-'
-' This is also wrapped in a Try/Catch statement, in
-' which if something goes wrong, it will log 'Error'
-' to the console; which it hopefully won't have to do
 
 		...
 
@@ -121,15 +114,10 @@ End Module
 		Console.Read()
 		Console.WriteLine("Closing...")
 
-		Try ' Try/Catch for errors
-			RemoveHandler manager.Attach, AddressOf manager_Attach
-			RemoveHandler manager.Detach, AddressOf manager_Detach
-			manager.close()
-			manager = Nothing
-			' Remove Handlers, close the manager, and erase the varible
-		Catch ex As Phidgets.Phidget Exception
-			Console.WriteLine("Error")
-		End Try
+		RemoveHandler manager.Attach, AddressOf manager_Attach
+		RemoveHandler manager.Detach, AddressOf manager_Detach
+		manager.close()
+		manager = Nothing
 
 	End Sub
 
@@ -143,42 +131,23 @@ End Module
 					</li>
 <li>
 
-					-
-
 					<pre>
 
 					<code class="VB.NET">
+' 4
+'
 ' Jumping back to the top of the file, we create
-' "manager_Attach", a sub-module that once we
+' "manager_Attach", a sub that once we
 ' attach a Phidget, it will be called
 ' 
-' We grab the Serial Number and name from the
-' arguments to the sub-module, and then neatly
-' write them to the Console
-'
-' Same as last time, this makes use of a Try/Catch
-' to stop the program crashing if things go wrong
+' We grab the 'Serial Number' and 'Name' from the varible 'e',
+' and then write them to the Console
 
 Module Module1
 
 	' A new sub for when USB Phidgets are connected to our device
 	Private Sub manager_Attach(ByVal sender As Object, ByVal e As Phidgets.Events.AttachEventArgs) Handles manager.Attach
-
-		' Pre-define varibles
-		Dim serialNumber As Integer
-		Dim name As String
-
-		Try
-			serialNumber = e.Device.SerialNumber
-			name = e.Device.Name
-			' Log the device name and serial number to the console
-			Console.WriteLine("Hello Device {0}, Serial Number: {1}!", serialNumber.ToString, name)
-		Catch ex As Phidgets.PhidgetException
-			Console.WriteLine("Error")
-			Console.WriteLine(ex.Code)
-			Console.WriteLine(ex.Description)
-		End Try
-
+		Console.WriteLine("Hello Device {0}, Serial Number: {1}!", e.Device.SerialNumber.ToString, e.Device.Name)
 	End Sub
 
 	Sub Main()
@@ -195,14 +164,12 @@ Module Module1
 					</li>
 <li>
 
-					-
-
 					<pre>
 
 					<code class="VB.NET">
+' 5
+'
 ' Now for the opposite to the last step,
-' with virtually the same code except for
-' Goodbye instead of Hello
 '
 ' Make sure you place this after you attach,
 ' but before your Main()
@@ -212,20 +179,7 @@ Module Module1
 	End Sub
 
 	Private Sub manager_Detach(ByVal sender As Object, ByVal e As Phidgets.Events.DetachEventArgs) Handles manager.Detach
-
-		Dim serialNumber As Integer
-		Dim name As String
-
-		Try
-			serialNumber = e.Device.SerialNumber
-			name = e.Device.Name
-			Console.WriteLine("Goodbye Device {0}, Serial Number: {1}!", serialNumber.ToString, name)
-		Catch ex As Phidgets.PhidgetException
-			Console.WriteLine("Error")
-			Console.WriteLine(ex.Code)
-			Console.WriteLine(ex.Description)
-		End Try
-
+		Console.WriteLine("Goodbye Device {0}, Serial Number: {1}!", e.Device.SerialNumber.ToString, e.Device.name)
 	End Sub
 
 	Sub Main()
@@ -240,33 +194,23 @@ Module Module1
 					</li>
 <li>
 
-					-
-
 					<pre>
 
 					<code class="VB.NET">
-' Last step; we create a sub-module that will
-' be called once an error occurs on the
-' managers side of things
+' 6
+'
+' Last step; we create a sub that will
+' be called once an manager error occurs
 '
 ' We also add a line just before the Main module
-' to make Phidgets.Manager the same as manager,
-' since its must easier to type
+' to hook our events to a new Phidget Manager
 
 		...
 
 	End Sub
 
 	Private Sub manager_Error(ByVal sender As Object, ByVal e As Phidgets.Events.ErrorEventArgs) Handles manager.Error
-		
-		Dim number As Integer
-		Dim description As String
-
-		number = e.Code
-		description = e.Description
-
-		Console.WriteLine("Error Event: {0} - {1}!", number.ToString, description)
-
+		Console.WriteLine("Error Event: {0} - {1}!", e.Code.ToString, e.Description)
 	End Sub
 
 	Dim WithEvents manager As Phidgets.Manager
@@ -283,11 +227,11 @@ Module Module1
 					</li>
 <li>
 
-					-
-
 					<pre>
 
 					<code class="VB.NET">
+' 7
+'
 ' Here is all of the code, in all its glory!
 '
 ' Feel free to copy and paste this into your
@@ -300,49 +244,15 @@ Module Module1
 Module Module1
 
 	Private Sub manager_Attach(ByVal sender As Object, ByVal e As Phidgets.Events.AttachEventArgs) Handles manager.Attach
-
-		Dim serialNumber As Integer
-		Dim name As String
-
-		Try
-			serialNumber = e.Device.SerialNumber
-			name = e.Device.Name
-			Console.WriteLine("Hello Device {0}, Serial Number: {1}!", serialNumber.ToString, name)
-		Catch ex As Phidgets.PhidgetException
-			Console.WriteLine("Error")
-			Console.WriteLine(ex.Code)
-			Console.WriteLine(ex.Description)
-		End Try
-
+		Console.WriteLine("Hello Device {0}, Serial Number: {1}!", e.Device.SerialNumber.ToString, e.Device.Name)
 	End Sub
 
 	Private Sub manager_Detach(ByVal sender As Object, ByVal e As Phidgets.Events.DetachEventArgs) Handles manager.Detach
-
-		Dim serialNumber As Integer
-		Dim name As String
-
-		Try
-			serialNumber = e.Device.SerialNumber
-			name = e.Device.Name
-			Console.WriteLine("Goodbye Device {0}, Serial Number: {1}!", serialNumber.ToString, name)
-		Catch ex As Phidgets.PhidgetException
-			Console.WriteLine("Error")
-			Console.WriteLine(ex.Code)
-			Console.WriteLine(ex.Description)
-		End Try
-
+		Console.WriteLine("Goodbye Device {0}, Serial Number: {1}!", e.Device.SerialNumber.ToString, e.Device.Name)
 	End Sub
 
 	Private Sub manager_Error(ByVal sender As Object, ByVal e As Phidgets.Events.ErrorEventArgs) Handles manager.Error
-		
-		Dim number As Integer
-		Dim description As String
-
-		number = e.Code
-		description = e.Description
-
-		Console.WriteLine("Error Event: {0} - {1}!", number.ToString, description)
-
+		Console.WriteLine("Error Event: {0} - {1}!", e.Code.ToString, e.Description)
 	End Sub
 
 	Dim WithEvents manager As Phidgets.Manager
@@ -357,16 +267,10 @@ Module Module1
 		Console.Read()
 		Console.WriteLine("Closing...")
 
-		Try
-			RemoveHandler manager.Attach, AddressOf manager_Attach
-			RemoveHandler manager.Detach, AddressOf manager_Detach
-			manager.close()
-			manager = Nothing
-		Catch ex As Phidgets.Phidget Exception
-			Console.WriteLine("Error")
-			Console.WriteLine(ex.Code)
-			Console.WriteLine(ex.Description)
-		End Try
+		RemoveHandler manager.Attach, AddressOf manager_Attach
+		RemoveHandler manager.Detach, AddressOf manager_Detach
+		manager.close()
+		manager = Nothing
 
 	End Sub
 
@@ -378,9 +282,46 @@ End Module
 					</pre>
 
 					</li>
+<li>
+
+					<pre>
+
+					<code class="VB.NET">
+' 8
+'
+' Now how hard can it be to hook it up
+' to a network?
+'
+' Ez
+
+	...
+
+	Sub Main()
+
+		manager = New Phidgets.Manager()
+
+		manager.open(IP ADDRESS HERE, 5001)
+
+		Console.WriteLine("Press Enter to end anytime")
+		Console.Read()
+		Console.WriteLine("Closing...")
+
+		...
+
+' For example
+		manager.open("192.168.0.59", 5001)
+
+' To find your Phidget's IP & port, view the network diagarm
+<br>
+
+					</code>
+
+					</pre>
+
+					</li>
 </ol>
 </div>
-<link rel="stylesheet" href="styles/idea.css">
+<link rel="stylesheet" href="css/idea.css">
 <script src="js/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 </body>

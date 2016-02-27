@@ -1,15 +1,14 @@
-' We now setup the Manager, which you guessed it;
-' manages our Phidgets connection to us
+' 2
 '
-' We start the manager by making a new Manager, and
-' then we open it up to connections
+' We now setup the Phidget manager
 '
-' Later on we will allow for network connections, but
-' now its simply a USB connection from the local
-' computer
+' We start the manager by making a new Manager,
+' and then 'open()' it
 '
-' We also Console.Read() to stop the program from
-' prematurely giving up its meager existence
+' Later on we will allow for network connections,
+' but for now simply a USB connection from the local machine
+'
+' We also Console.Read() to stop the program from quitting
 
 Module Module1
 

@@ -1,3 +1,5 @@
+' 8
+'
 ' Now how hard can it be to hook it up
 ' to a network?
 '
@@ -9,7 +11,7 @@
 
 		manager = New Phidgets.Manager()
 
-		manager.open(IP ADDRESS HERE, PORT HERE)
+		manager.open(IP ADDRESS HERE, 5001)
 
 		Console.WriteLine("Press Enter to end anytime")
 		Console.Read()
@@ -18,7 +20,6 @@
 		...
 
 ' For example
-		manager.open("192.168.0.156, 5001)
+		manager.open("192.168.0.59", 5001)
 
-' To find your Phidget's IP & port, follow
-' the other tutorials
+' To find your Phidget's IP & port, view the network diagarm

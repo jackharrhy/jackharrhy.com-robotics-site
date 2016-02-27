@@ -1,0 +1,9 @@
+#!/bin/bash
+
+IFS=$'\n'
+
+cat start.html
+
+markdown list.md
+
+cat quit.html

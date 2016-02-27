@@ -1,8 +1,10 @@
+' 1
+'
 ' This is the blank project that Visual Basic
 ' creates when you make a new project
 '
 ' You should have followed the previous tutorial
-' on setting up your project with the Phidget DLL
+' on setting up your project with the Phidget .NET DLL
 ' file before going ahead
 '
 ' By the end of this tutorial you should have a
